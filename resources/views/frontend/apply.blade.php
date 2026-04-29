@@ -351,19 +351,42 @@
 
             <!-- Pernyataan & Tombol Submit -->
             <section class="bg-gray-50 rounded-xl p-6 border border-gray-200 mt-8">
-                <label class="flex items-start gap-4 cursor-pointer">
-                    <input type="checkbox" name="agreement" required class="mt-1 w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500">
-                    <span class="text-sm text-gray-700 leading-relaxed">
-                        <strong>Pernyataan Kejujuran:</strong><br>
-                        Saya menyatakan bahwa semua data yang saya masukkan dalam formulir ini adalah benar dan dapat dipertanggungjawabkan. Jika di kemudian hari ditemukan ketidaksesuaian data antara kualifikasi yang saya sampaikan dengan berkas asli, saya bersedia menerima sanksi berupa <strong>gugurnya lamaran saya secara otomatis</strong>.
-                    </span>
-                </label>
+                <div class="space-y-5">
+                    <!-- Checkbox 1: Pernyataan Kejujuran -->
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        <input type="checkbox" 
+                               x-model="agreement1" 
+                               name="agreement_honesty" 
+                               required 
+                               class="mt-0.5 w-5 h-5 flex-shrink-0 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer">
+                        <span class="text-sm text-gray-700 leading-relaxed select-none flex-1">
+                            <strong class="text-gray-900">Pernyataan Kejujuran:</strong><br>
+                            Saya menyatakan bahwa semua data yang saya masukkan dalam formulir ini adalah benar dan dapat dipertanggungjawabkan. Jika di kemudian hari ditemukan ketidaksesuaian data antara kualifikasi yang saya sampaikan dengan berkas asli, saya bersedia menerima sanksi berupa <strong class="text-red-600">gugurnya lamaran saya secara otomatis</strong>.
+                        </span>
+                    </label>
+
+                    <!-- Checkbox 2: Kebijakan Privasi -->
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        <input type="checkbox" 
+                               x-model="agreement2" 
+                               name="agreement_privacy" 
+                               required 
+                               class="mt-0.5 w-5 h-5 flex-shrink-0 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer">
+                        <span class="text-sm text-gray-700 leading-relaxed select-none flex-1">
+                            <strong class="text-gray-900">Pernyataan Kebijakan Privasi:</strong><br>
+                            Dengan ini saya menyatakan telah membaca dan menyetujui <a href="{{ route('privacy') }}" target="_blank" class="text-green-600 font-bold hover:underline">Kebijakan Privasi</a> yang berlaku.
+                        </span>
+                    </label>
+                </div>
 
                 <div class="mt-8 flex flex-col md:flex-row gap-4 justify-end">
-                    <a href="/" class="px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center">
-                        Kembali
+                    <a href="/" class="px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center flex items-center justify-center gap-2">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i> Kembali
                     </a>
-                    <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <button type="button" 
+                            @click="validateAndSubmit($el)" 
+                            :class="(agreement1 && agreement2) ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'"
+                            class="px-8 py-3 rounded-xl font-bold text-white transition-colors flex items-center justify-center gap-2 shadow-sm">
                         Kirim Lamaran Sekarang <i data-lucide="send" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -379,6 +402,10 @@
             selectedEducation: '',
             minEducationRequirement: '',
             screeningFailed: false,
+            
+            // State untuk checkbox pernyataan
+            agreement1: false,
+            agreement2: false,
             
             // State untuk pengalaman kerja dinamis
             experienceType: '{{ old("experience_type", "experienced") }}',
@@ -443,6 +470,49 @@
 
             removeExperience(index) {
                 this.experiences.splice(index, 1);
+            },
+
+            // Fungsi validasi dan submit form
+            validateAndSubmit(button) {
+                const form = button.closest('form');
+                
+                // Cek apakah kedua checkbox sudah dicentang
+                if (!this.agreement1 || !this.agreement2) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian!',
+                        html: 'Harap centang <strong>kedua pernyataan</strong> di bawah sebelum mengirim lamaran.',
+                        confirmButtonText: 'Mengerti',
+                        confirmButtonColor: '#16a34a',
+                        customClass: {
+                            popup: 'rounded-2xl',
+                            confirmButton: 'rounded-xl px-6 py-2.5 font-semibold'
+                        }
+                    });
+                    return;
+                }
+                
+                // Cek validitas form HTML5 (required fields)
+                if (!form.checkValidity()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Form Belum Lengkap!',
+                        html: 'Harap lengkapi <strong>semua kolom wajib</strong> yang ditandai dengan tanda bintang (*) sebelum mengirim lamaran.',
+                        confirmButtonText: 'Periksa Kembali',
+                        confirmButtonColor: '#dc2626',
+                        customClass: {
+                            popup: 'rounded-2xl',
+                            confirmButton: 'rounded-xl px-6 py-2.5 font-semibold'
+                        }
+                    });
+                    
+                    // Trigger validasi HTML5 untuk menampilkan field yang error
+                    form.reportValidity();
+                    return;
+                }
+                
+                // Jika semua validasi lolos, submit form
+                form.submit();
             }
         }))
     });

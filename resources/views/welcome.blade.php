@@ -1,5 +1,6 @@
 @extends('layouts.frontend')
-
+<!-- Tambahkan di dalam tag <head> -->
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 @section('content')
     <!-- Hero Section -->
     <header class="bg-green-600 py-16 px-4 text-center">
@@ -55,7 +56,7 @@
             <!-- Menggunakan data yang sudah diurutkan ($sortedJobs) -->
             @foreach($sortedJobs as $job)
             <!-- Kita bungkus tiap card dengan x-data Alpine.js untuk fitur Modal -->
-            <div x-data="{ showModal: false }" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all flex flex-col h-full">
+            <div x-data="{ showModal: false, acceptedPrivacy: false }" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all flex flex-col h-full">
                 
                 <!-- Card Header -->
                 <div class="mb-4">
@@ -163,13 +164,45 @@
                             </div>
 
                             <!-- Modal Footer -->
-                            <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3 justify-end items-center sticky bottom-0">
-                                <button @click="showModal = false" class="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
-                                    Tutup
-                                </button>
-                                <a href="{{ route('applications.create', $job->id) }}" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 transition-colors text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-sm">
-                                    Lamar Sekarang <i data-lucide="send" class="w-4 h-4"></i>
-                                </a>
+                            <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex flex-col gap-4 sticky bottom-0">
+                                <!-- Checkbox Kebijakan Privasi -->
+                                <div class="flex items-start gap-3 w-full text-left">
+                                    <input type="checkbox" 
+                                           id="privacy_{{ $job->id }}" 
+                                           x-model="acceptedPrivacy" 
+                                           class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer">
+                                    <label for="privacy_{{ $job->id }}" class="text-sm text-gray-600 cursor-pointer select-none leading-snug">
+                                        Saya telah membaca dan menyetujui 
+                                        <a href="{{ route('privacy') }}" target="_blank" class="text-green-600 font-bold hover:underline">Kebijakan Privasi</a> Tokabe.id.
+                                    </label>
+                                </div>
+                                
+                                <!-- Buttons -->
+                                <div class="flex flex-col sm:flex-row gap-3 justify-end items-center">
+                                    <button @click="showModal = false" class="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
+                                        Tutup
+                                    </button>
+                                    <a :href="acceptedPrivacy ? '{{ route('applications.create', $job->id) }}' : '#'" 
+                                       @click.prevent="if(!acceptedPrivacy) { 
+                                           Swal.fire({
+                                               icon: 'warning',
+                                               title: 'Perhatian!',
+                                               html: 'Harap membaca dan menyetujui <strong>Kebijakan Privasi</strong> terlebih dahulu dengan mencentang kotak yang tersedia.',
+                                               confirmButtonText: 'Mengerti',
+                                               confirmButtonColor: '#16a34a',
+                                               customClass: {
+                                                   popup: 'rounded-2xl',
+                                                   confirmButton: 'rounded-xl px-6 py-2.5 font-semibold'
+                                               }
+                                           });
+                                       } else {
+                                           window.location.href = '{{ route('applications.create', $job->id) }}';
+                                       }"
+                                       :class="acceptedPrivacy ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'"
+                                       class="w-full sm:w-auto transition-colors text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-sm">
+                                        Lamar Sekarang <i data-lucide="send" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
                             </div>
 
                         </div>

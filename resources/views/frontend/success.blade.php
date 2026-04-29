@@ -1,5 +1,6 @@
 @extends('layouts.frontend')
-
+<!-- Tambahkan di dalam tag <head> -->
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 @section('content')
 <div class="max-w-3xl mx-auto px-4 py-16 md:py-24 text-center">
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-16 relative overflow-hidden">
