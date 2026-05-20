@@ -29,7 +29,10 @@ class ApplicationController extends Controller
                              ->exists();
 
         if ($exists) {
-            return back()->withInput()->withErrors(['email' => 'Anda sudah pernah melamar untuk posisi ini menggunakan email tersebut. Silakan tunggu informasi selanjutnya dari tim kami.']);
+            return back()
+                ->withInput()
+                ->with('uploaded_files', $this->getUploadedFileNames($request))
+                ->withErrors(['email' => 'Anda sudah pernah melamar untuk posisi ini menggunakan email tersebut. Silakan tunggu informasi selanjutnya dari tim kami.']);
         }
 
         // 2. VALIDASI PRE-SCREENING BACKEND (Cegah Bypass HTML)
@@ -38,11 +41,15 @@ class ApplicationController extends Controller
         $applicantWeight = $eduWeights[$request->education_level] ?? 0;
 
         if ($applicantWeight < $jobMinWeight) {
-             return back()->withInput()->withErrors(['education_level' => 'Kualifikasi pendidikan Anda tidak memenuhi syarat minimal untuk posisi ini.']);
+             return back()
+                ->withInput()
+                ->with('uploaded_files', $this->getUploadedFileNames($request))
+                ->withErrors(['education_level' => 'Kualifikasi pendidikan Anda tidak memenuhi syarat minimal untuk posisi ini.']);
         }
 
         // 3. VALIDASI FORM UTAMA
-        $validated = $request->validate([
+        try {
+            $validated = $request->validate([
             // Bagian 1
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -83,8 +90,15 @@ class ApplicationController extends Controller
             'supporting_doc' => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
             
             // Pernyataan Final
-            'agreement' => 'accepted'
+            'agreement_honesty' => 'accepted',
+            'agreement_privacy' => 'accepted'
         ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()
+                ->withInput()
+                ->with('uploaded_files', $this->getUploadedFileNames($request))
+                ->withErrors($e->errors());
+        }
 
         // 4. PROSES UPLOAD FILE DENGAN PENAMAAN CUSTOM
         $nameSlug = Str::slug($validated['name']); 
@@ -182,5 +196,25 @@ class ApplicationController extends Controller
         }
 
         return view('frontend.cek-status', compact('applications', 'email'));
+    }
+
+    // Helper method untuk menyimpan nama file yang sudah diupload
+    private function getUploadedFileNames(Request $request)
+    {
+        $files = [];
+        
+        if ($request->hasFile('photo')) {
+            $files['photo'] = $request->file('photo')->getClientOriginalName();
+        }
+        
+        if ($request->hasFile('cv')) {
+            $files['cv'] = $request->file('cv')->getClientOriginalName();
+        }
+        
+        if ($request->hasFile('supporting_doc')) {
+            $files['supporting_doc'] = $request->file('supporting_doc')->getClientOriginalName();
+        }
+        
+        return $files;
     }
 }

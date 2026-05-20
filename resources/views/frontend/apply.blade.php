@@ -63,13 +63,16 @@
         @if ($errors->any())
         <div class="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
             <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 mt-0.5 shrink-0"></i>
-            <div>
+            <div class="flex-1">
                 <h4 class="text-sm font-bold text-red-800 mb-1">Gagal mengirim lamaran!</h4>
                 <ul class="list-disc pl-5 text-sm text-red-700 space-y-1">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
+                <p class="text-xs text-red-600 mt-2 font-semibold">
+                    <i data-lucide="info" class="w-3 h-3 inline"></i> Scroll ke bawah untuk melihat field yang perlu diperbaiki. Data yang sudah Anda isi tetap tersimpan.
+                </p>
             </div>
         </div>
         @endif
@@ -91,15 +94,24 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Nama Lengkap *</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        <input type="text" name="name" value="{{ old('name') }}" class="w-full border @error('name') border-red-500 bg-red-50 @else border-gray-300 @enderror rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        @error('name')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Email Aktif *</label>
-                        <input type="email" name="email" value="{{ old('email') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        <input type="email" name="email" value="{{ old('email') }}" class="w-full border @error('email') border-red-500 bg-red-50 @else border-gray-300 @enderror rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        @error('email')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Nomor WhatsApp *</label>
-                        <input type="number" name="whatsapp" value="{{ old('whatsapp') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        <input type="number" name="whatsapp" value="{{ old('whatsapp') }}" class="w-full border @error('whatsapp') border-red-500 bg-red-50 @else border-gray-300 @enderror rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none" required>
+                        @error('whatsapp')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -129,7 +141,16 @@
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Upload Pas Photo <span class="font-normal text-gray-400">(JPG/PNG, Max 2MB)</span> *</label>
-                        <input type="file" name="photo" accept="image/*" class="w-full border border-gray-300 rounded-lg p-2.5 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" required>
+                        @if(session('uploaded_files.photo'))
+                            <div class="mb-2 p-2 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700 flex items-center gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                <span>File sudah diupload: <strong>{{ session('uploaded_files.photo') }}</strong></span>
+                            </div>
+                        @endif
+                        <input type="file" name="photo" accept="image/*" class="w-full border border-gray-300 rounded-lg p-2.5 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" {{ session('uploaded_files.photo') ? '' : 'required' }}>
+                        @if(session('uploaded_files.photo'))
+                            <p class="text-xs text-gray-500 mt-1">Upload file baru jika ingin mengganti</p>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -337,20 +358,44 @@
                         <i data-lucide="file-text" class="w-8 h-8 text-gray-400 mx-auto mb-3"></i>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Upload CV / Resume *</label>
                         <p class="text-xs text-gray-500 mb-4">Wajib berformat PDF (Maks. 2MB)</p>
-                        <input type="file" name="cv" accept=".pdf" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" required>
+                        @if(session('uploaded_files.cv'))
+                            <div class="mb-3 p-2 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700 flex items-center gap-2 justify-center">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                <span>File sudah diupload: <strong>{{ session('uploaded_files.cv') }}</strong></span>
+                            </div>
+                        @endif
+                        <input type="file" name="cv" accept=".pdf" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" {{ session('uploaded_files.cv') ? '' : 'required' }}>
+                        @if(session('uploaded_files.cv'))
+                            <p class="text-xs text-gray-500 mt-2">Upload file baru jika ingin mengganti</p>
+                        @endif
                     </div>
 
                     <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-500 transition-colors bg-gray-50">
                         <i data-lucide="folder-archive" class="w-8 h-8 text-gray-400 mx-auto mb-3"></i>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Paklaring / Sertifikat <span class="font-normal text-gray-400">(Opsional)</span></label>
                         <p class="text-xs text-gray-500 mb-4">Format PDF/JPG/PNG (Maks. 2MB)</p>
+                        @if(session('uploaded_files.supporting_doc'))
+                            <div class="mb-3 p-2 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700 flex items-center gap-2 justify-center">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                <span>File sudah diupload: <strong>{{ session('uploaded_files.supporting_doc') }}</strong></span>
+                            </div>
+                        @endif
                         <input type="file" name="supporting_doc" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+                        @if(session('uploaded_files.supporting_doc'))
+                            <p class="text-xs text-gray-500 mt-2">Upload file baru jika ingin mengganti</p>
+                        @endif
                     </div>
                 </div>
             </section>
 
             <!-- Pernyataan & Tombol Submit -->
-            <section class="bg-gray-50 rounded-xl p-6 border border-gray-200 mt-8">
+            <section class="bg-gray-50 rounded-xl p-6 border @if($errors->has('agreement_honesty') || $errors->has('agreement_privacy')) border-red-500 @else border-gray-200 @endif mt-8">
+                @if($errors->has('agreement_honesty') || $errors->has('agreement_privacy'))
+                    <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                        <span><strong>Pernyataan wajib disetujui!</strong> Centang kedua checkbox di bawah ini.</span>
+                    </div>
+                @endif
                 <div class="space-y-5">
                     <!-- Checkbox 1: Pernyataan Kejujuran -->
                     <label class="flex items-start gap-3 cursor-pointer group">
@@ -404,21 +449,19 @@
             screeningFailed: false,
             
             // State untuk checkbox pernyataan
-            agreement1: false,
-            agreement2: false,
+            agreement1: {{ old('agreement_honesty') ? 'true' : 'false' }},
+            agreement2: {{ old('agreement_privacy') ? 'true' : 'false' }},
             
             // State untuk pengalaman kerja dinamis
             experienceType: '{{ old("experience_type", "experienced") }}',
-            experiences: [
-                {
-                    company_name: '',
-                    job_position: '',
-                    work_start_date: '',
-                    work_end_date: '',
-                    is_currently_working: false,
-                    job_description: ''
-                }
-            ],
+            experiences: {!! json_encode(old('experiences', [[
+                'company_name' => '',
+                'job_position' => '',
+                'work_start_date' => '',
+                'work_end_date' => '',
+                'is_currently_working' => false,
+                'job_description' => ''
+            ]])) !!},
             
             // Urutan Bobot Pendidikan
             educationWeights: {
@@ -437,6 +480,17 @@
                 @if($errors->any())
                     this.selectedEducation = '{{ old('education_level') }}';
                     this.step = 1;
+                    
+                    // Auto scroll ke field pertama yang error setelah halaman load
+                    this.$nextTick(() => {
+                        setTimeout(() => {
+                            const firstError = document.querySelector('.border-red-500, [class*="bg-red-50"]');
+                            if (firstError) {
+                                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                firstError.focus();
+                            }
+                        }, 300);
+                    });
                 @endif
             },
 

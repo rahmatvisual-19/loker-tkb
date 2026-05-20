@@ -9,6 +9,8 @@
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Alpine.js Collapse Plugin -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
