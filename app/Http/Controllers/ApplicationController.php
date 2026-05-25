@@ -23,6 +23,14 @@ class ApplicationController extends Controller
     // Memproses data lamaran yang disubmit
     public function store(Request $request, Job $job)
     {
+        // Auto-prepend https:// to portfolio_link if it doesn't have a protocol
+        if ($request->filled('portfolio_link')) {
+            $portfolioLink = $request->input('portfolio_link');
+            if (!preg_match("~^(?:f|ht)tps?://~i", $portfolioLink)) {
+                $request->merge(['portfolio_link' => 'https://' . $portfolioLink]);
+            }
+        }
+
         // 1. VALIDASI DUPLIKASI (Email + Job ID)
         $exists = Application::where('job_id', $job->id)
                              ->where('email', $request->email)

@@ -137,7 +137,10 @@
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Link Portofolio / LinkedIn <span class="font-normal text-gray-400">(Opsional)</span></label>
-                        <input type="url" name="portfolio_link" value="{{ old('portfolio_link') }}" placeholder="https://" class="w-full border border-gray-300 rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none">
+                        <input type="text" name="portfolio_link" value="{{ old('portfolio_link') }}" placeholder="https://" class="w-full border @error('portfolio_link') border-red-500 bg-red-50 @else border-gray-300 @enderror rounded-lg p-3 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none">
+                        @error('portfolio_link')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5">Upload Pas Photo <span class="font-normal text-gray-400">(JPG/PNG, Max 2MB)</span> *</label>
