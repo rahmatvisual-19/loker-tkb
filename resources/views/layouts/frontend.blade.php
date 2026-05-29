@@ -53,7 +53,24 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tokabe.id - Karir</title>
+    <title>tokabe.id - lowongan kerja / karir</title>
+    <meta name="description" content="Temukan peluang karir terbaik dan bergabunglah bersama kami di Tokabe.id.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Bergabunglah Bersama Tim Tokabe.id">
+    <meta property="og:description" content="Temukan peluang karir terbaik dan bergabunglah bersama kami di Tokabe.id.">
+    <meta property="og:image" content="{{ asset('images/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="Bergabunglah Bersama Tim Tokabe.id">
+    <meta name="twitter:description" content="Temukan peluang karir terbaik dan bergabunglah bersama kami di Tokabe.id.">
+    <meta name="twitter:image" content="{{ asset('images/og-image.png') }}">
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
