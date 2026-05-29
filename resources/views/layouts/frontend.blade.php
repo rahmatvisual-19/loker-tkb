@@ -1,6 +1,56 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Google Tag Manager (GTM-WMSK4N53) -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WMSK4N53');
+    </script>
+    <!-- End Google Tag Manager (GTM-WMSK4N53) -->
+
+    <!-- Google Analytics 4 (GA4) & Google Ads -->
+    <script>
+        // Pemuatan script GA4 pertama
+        var ga1 = document.createElement('script');
+        ga1.async = true;
+        ga1.src = 'https://www.googletagmanager.com/gtag/js?id=G-2DR31JFPHR';
+        document.head.appendChild(ga1);
+        // Pemuatan script GA4 kedua
+        var ga2 = document.createElement('script');
+        ga2.async = true;
+        ga2.src = 'https://www.googletagmanager.com/gtag/js?id=G-VQG7HT2KD0';
+        document.head.appendChild(ga2);
+        // Inisialisasi gtag
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-2DR31JFPHR');
+        gtag('config', 'G-VQG7HT2KD0');
+        gtag('config', 'AW-959548694');
+    </script>
+    <!-- End Google Analytics 4 (GA4) & Google Ads -->
+
+    <!-- Google Tag Manager (GTM-PLCTPGGZ) -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+          'gtm.start': new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-PLCTPGGZ');
+    </script>
+    <!-- End Google Tag Manager (GTM-PLCTPGGZ) -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tokabe.id - Karir</title>
@@ -18,6 +68,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-[#f8f9fa] font-sans antialiased flex flex-col min-h-screen">
+    <!-- Google Tag Manager (noscript) GTM-WMSK4N53 -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMSK4N53"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     
     <!-- Navbar Top -->
     <nav class="bg-white px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-50 border-b border-gray-100 shadow-sm">
