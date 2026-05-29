@@ -1,6 +1,5 @@
 @extends('layouts.frontend')
-<!-- Tambahkan di dalam tag <head> -->
-<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
+
 @section('content')
     <!-- Hero Section -->
     <header class="bg-green-600 py-16 px-4 text-center">

@@ -61,7 +61,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="Bergabunglah Bersama Tim Tokabe.id">
     <meta property="og:description" content="Temukan peluang karir terbaik dan bergabunglah bersama kami di Tokabe.id.">
-    <meta property="og:image" content="{{ asset('images/og-image.png') }}">
+    <meta property="og:image" content="{{ secure_asset('images/og-image.png') }}?v=1">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -70,7 +70,7 @@
     <meta name="twitter:url" content="{{ url()->current() }}">
     <meta name="twitter:title" content="Bergabunglah Bersama Tim Tokabe.id">
     <meta name="twitter:description" content="Temukan peluang karir terbaik dan bergabunglah bersama kami di Tokabe.id.">
-    <meta name="twitter:image" content="{{ asset('images/og-image.png') }}">
+    <meta name="twitter:image" content="{{ secure_asset('images/og-image.png') }}?v=1">
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
